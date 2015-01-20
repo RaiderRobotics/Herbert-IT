@@ -18,7 +18,9 @@ public class Robot extends IterativeRobot {
 	
 	//global variables
 	private int driveState = ARCADE;
-
+	
+	//this is comment
+	
 	//create object references
 	Joystick leftStick, rightStick;
 	public RobotDrive driveTrain1;
