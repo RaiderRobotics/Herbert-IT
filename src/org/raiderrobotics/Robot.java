@@ -15,6 +15,8 @@ public class Robot extends IterativeRobot {
   //constants
 	final static int ARCADE = 1;
 	final static int TANK = 2;
+	final static int MAXSPEED = 60;
+	final static boolean FAST = false;
 	
 	//global variables
 	private int driveState = ARCADE;
@@ -64,10 +66,16 @@ public class Robot extends IterativeRobot {
 
 	// Drive the robot normally
 	private void normalDrive() {
-		if (driveState == ARCADE) {
+		double stickX = leftStick.getX();
+		double stickY = leftStick.getY();
+		
+		stickY *= (MAXSPEED/100.0);
+		stickX *= (MAXSPEED/100.0);
+		
+		if (leftStick.getRawButton(1)) {
 			driveTrain1.arcadeDrive(leftStick, true); //use squared inputs
 		} else {
-			driveTrain1.tankDrive(leftStick, rightStick);
+			driveTrain1.arcadeDrive(stickX, stickY);
 		}
 	}
 
