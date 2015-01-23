@@ -21,6 +21,7 @@ public final class RobotMap {
 	final static int LOGITECH_TRIGGER = 1;
 	final static int LOGITECH_BTN2 = 2;
 	final static int LOGITECH_BTN3 = 3;
+	final static int LOGITECH_BTN4 = 4;
 	
 	//global variables that are NOT final
 	

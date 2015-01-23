@@ -108,12 +108,15 @@ public class Robot extends IterativeRobot {
 	/* This function is called periodically during test mode */
 	/*** Run only one side of robot drive - based on logitech buttons****/
 	public void testPeriodic() { 
-		if (logitech.getRawButton(LOGITECH_BTN2) ) {
-			talon1.set(logitech.getY());
-		}
 		if (logitech.getRawButton(LOGITECH_BTN3) ) {
+			talon1.set(logitech.getY());
+			talon2.stopMotor();
+		} else if (logitech.getRawButton(LOGITECH_BTN4) ) {
 			talon2.set(logitech.getY());
-		}	
+			talon1.stopMotor();
+		} else {
+			talon1.stopMotor();
+			talon2.stopMotor();
+		}
 	}
-
 }

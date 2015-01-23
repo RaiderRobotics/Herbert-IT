@@ -12,5 +12,5 @@
 
 ## Test mode
 
-* button2 = drive Talon1 only
-* button3 = drive Talon2 only
+* button3 = drive Talon1 only
+* button4 = drive Talon2 only
