@@ -12,16 +12,14 @@ import edu.wpi.first.wpilibj.*;
  */
 public class Robot extends IterativeRobot {
   
-  //constants
+    //constants
 	final static int ARCADE = 1;
 	final static int TANK = 2;
-	final static int MAXSPEED = 60;
-	final static boolean FAST = false;
-	
+	final static int NORMSPEED = 70;	//% speed of normal driving
+	final static int MAXSPEED = 95;		//% speed of maximum motor output for fast driving
+										//drive team said that 100% is too fast for manual driving
 	//global variables
-	private int driveState = ARCADE;
-	
-	//this is comment
+	//private int driveState = ARCADE;
 	
 	//create object references
 	Joystick leftStick, rightStick;
@@ -34,8 +32,8 @@ public class Robot extends IterativeRobot {
 	*/
 	
 	public void robotInit() {
-		talon1 = new Talon(0);
-		talon2 = new Talon(1);
+		talon1 = new Talon(1);
+		talon2 = new Talon(2);
 		
 		//reversing 1,2 and 3,4 will switch front and back in arcade mode.
 		driveTrain1 = new RobotDrive(talon1, talon2);
@@ -57,11 +55,6 @@ public class Robot extends IterativeRobot {
 		
 		normalDrive();
 
-		//check for button press to switch mode. Use two buttons to prevent bounce.
-		boolean button2 = leftStick.getRawButton(2);
-		boolean button3 = leftStick.getRawButton(3);
-		if (button2) driveState = ARCADE;
-		if (button3) driveState = TANK;
 	}
 
 	// Drive the robot normally
@@ -69,13 +62,15 @@ public class Robot extends IterativeRobot {
 		double stickX = leftStick.getX();
 		double stickY = leftStick.getY();
 		
-		stickY *= (MAXSPEED/100.0);
-		stickX *= (MAXSPEED/100.0);
-		
-		if (leftStick.getRawButton(1)) {
-			driveTrain1.arcadeDrive(leftStick, true); //use squared inputs
+		double xnorm = stickX * (NORMSPEED/100.0);
+		double ynorm = stickY * (NORMSPEED/100.0);
+		double xmax = stickX * (MAXSPEED/100.0);
+		double ymax = stickY * (MAXSPEED/100.0);
+		//use 6 for XBOX; 1 for Logitech
+		if (leftStick.getRawButton(6)) {
+			driveTrain1.arcadeDrive(ymax, xmax); //use squared inputs
 		} else {
-			driveTrain1.arcadeDrive(stickX, stickY);
+			driveTrain1.arcadeDrive(ynorm, xnorm);
 		}
 	}
 
