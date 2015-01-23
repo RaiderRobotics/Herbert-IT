@@ -14,15 +14,19 @@ public final class RobotMap {
 	final static int MAXSPEED = 95;		//% speed of maximum motor output for fast driving
 										//drive team said that 100% is too fast for manual driving
 	/* joysticks and buttons */
-	//static Joystick Xbox360;
-	//static Joystick Logitech;
 	final static int XBOX_BUMPER_L = 5;
 	final static int XBOX_BUMPER_R = 6;
 	final static int LOGITECH_TRIGGER = 1;
 	final static int LOGITECH_BTN2 = 2;
 	final static int LOGITECH_BTN3 = 3;
 	final static int LOGITECH_BTN4 = 4;
-	
+
+	//Port allocation
+	final static int XBOX_PORT = 1;
+	final static int LOGITECH_PORT = 0;
+	final static int TALON_1_PORT = 1;
+	final static int TALON_2_PORT = 2;
+
 	//global variables that are NOT final
 	
 }
