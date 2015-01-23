@@ -17,7 +17,11 @@ hs_err_pid*
 *.iws
 .idea/
 
-#something KT was using
+#These files are needed in order to transfer to roboRIO. 
+#They don't need to be uploaded to GitHub (I think)
 build.xml
 build.properties
 /bin/
+
+#This was recently created. Don't know why.
+sysProps.xml
