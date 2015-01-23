@@ -99,7 +99,7 @@ public class QuickTurnExecutor {
         if(complete)
             return;
         
-        double angle = axis[1]-gyro.getAngle();
+        double angle = axis[1]-gyro.getAngle(); //the master formula: standrad degree - current degree = turn degree !!
                 
         if((angle > 0 && gyro.getAngle() < angle - (angleCorrection * turnSpeed)) || (angle < 0 && gyro.getAngle() > angle + (angleCorrection * turnSpeed))) //If not in position yet
             main.driveTrain1.drive(button[2]*turnSpeed, 1);
