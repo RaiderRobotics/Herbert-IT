@@ -3,6 +3,8 @@ package org.raiderrobotics;
 //import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.*;
 
+import static org.raiderrobotics.RobotMap.*;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -11,68 +13,101 @@ import edu.wpi.first.wpilibj.*;
  * directory.
  */
 public class Robot extends IterativeRobot {
-  
-  //constants
-	final static int ARCADE = 1;
-	final static int TANK = 2;
-	
-	//global variables
-	private int driveState = ARCADE;
-
-	//create object references
-	Joystick leftStick, rightStick;
+	//Create object references
+	Joystick logitech, xbox360;
 	public RobotDrive driveTrain1;
 	Talon talon1, talon2;
 
-
-	/*This function is run when the robot is first started up and should be used for any initialization code. 
+	/*This function is run when the robot is first started up and should be used for any initialization code.
 	* Create global objects here.
 	*/
-	
 	public void robotInit() {
-		talon1 = new Talon(0);
-		talon2 = new Talon(1);
-		
+		talon1 = new Talon(TALON_1_PORT);
+		talon2 = new Talon(TALON_2_PORT);
+
+		//this is supposed to shut off the motors when joystick is at zero to save power.
+		//Does it work only on Jaguars?
+		talon1.enableDeadbandElimination(true);
+        talon2.enableDeadbandElimination(true);
+
 		//reversing 1,2 and 3,4 will switch front and back in arcade mode.
 		driveTrain1 = new RobotDrive(talon1, talon2);
 
-		//this works to fix arcade joystick 
+		//this works to fix arcade joystick
 		driveTrain1.setInvertedMotor(RobotDrive.MotorType.kFrontLeft,true);
 		driveTrain1.setInvertedMotor(RobotDrive.MotorType.kRearLeft,true);
 		driveTrain1.setInvertedMotor(RobotDrive.MotorType.kFrontRight,true);
 		driveTrain1.setInvertedMotor(RobotDrive.MotorType.kRearRight,true);
 
-		leftStick = new Joystick(0);
-		rightStick = new Joystick(1);
+		logitech = new Joystick(LOGITECH_PORT);
+		xbox360 = new Joystick(XBOX_PORT);
 	}
 
 	/* This function is called periodically during operator control.
-	* Called at 50Hz (every 20ms). This method must not take more than 20ms to complete! 
+	* Called at 50Hz (every 20ms). This method must not take more than 20ms to complete!
 	*/
 	public void teleopPeriodic() {
-		
 		normalDrive();
-
-		//check for button press to switch mode. Use two buttons to prevent bounce.
-		boolean button2 = leftStick.getRawButton(2);
-		boolean button3 = leftStick.getRawButton(3);
-		if (button2) driveState = ARCADE;
-		if (button3) driveState = TANK;
 	}
 
 	// Drive the robot normally
-	private void normalDrive() {
-		if (driveState == ARCADE) {
-			driveTrain1.arcadeDrive(leftStick, true); //use squared inputs
-		} else {
-			driveTrain1.tankDrive(leftStick, rightStick);
-		}
-	}
+	//Temporarily: we are allowing either controller to work
+    private void normalDrive() {
+        double stick1X = logitech.getX();
+        double stick1Y = logitech.getY();
+        double stick2X = xbox360.getX(); //this is the same as xbox.getRawAxis(1)
+        double stick2Y = xbox360.getY(); //this is the same as xbox.getRawAxis(2)
+
+        //drive using whichever joystick is pushed further from zero in any direction
+        double n1 = stick1X * stick1X + stick1Y * stick1Y;
+        double n2 = stick2X * stick2X + stick2Y * stick2Y;
+
+        //If using an xBox controller
+        if (n1 <= n2) {
+            if (xbox360.getRawButton(XBOX_BUMPER_R)) {//high speed mode
+                double x2max = stick2X * (MAXSPEED / 100.0);
+                double y2max = stick2Y * (MAXSPEED / 100.0);
+
+                driveTrain1.arcadeDrive(y2max, x2max, true); //use squared inputs
+            } else {
+                double x2norm = stick2X * (NORMSPEED / 100.0);
+                double y2norm = stick2Y * (NORMSPEED / 100.0);
+
+                driveTrain1.arcadeDrive(y2norm, x2norm, true);
+            }
+        }
+
+        //If using a Logitech controller
+        else {
+            if (logitech.getRawButton(LOGITECH_TRIGGER)) {
+                double x1max = stick1X * (MAXSPEED / 100.0);
+                double y1max = stick1Y * (MAXSPEED / 100.0);
+
+                driveTrain1.arcadeDrive(y1max, x1max, true); //use squared inputs
+            } else {
+                double x1norm = stick1X * (NORMSPEED / 100.0);
+                double y1norm = stick1Y * (NORMSPEED / 100.0);
+
+                driveTrain1.arcadeDrive(y1norm, x1norm, true);
+            }
+        }
+    }
 
   /* This function is called periodically during autonomous */
 	public void autonomousPeriodic() { }
 
 	/* This function is called periodically during test mode */
-	public void testPeriodic() { }
-
+	/*** Run only one side of robot drive - based on logitech buttons****/
+	public void testPeriodic() {
+		if (logitech.getRawButton(LOGITECH_BTN3) ) {
+			talon1.set(logitech.getY());
+			talon2.stopMotor();
+		} else if (logitech.getRawButton(LOGITECH_BTN4) ) {
+			talon2.set(logitech.getY());
+			talon1.stopMotor();
+		} else {
+			talon1.stopMotor();
+			talon2.stopMotor();
+		}
+	}
 }
