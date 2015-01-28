@@ -17,6 +17,7 @@ public class Robot extends IterativeRobot {
 	Joystick logitech, xbox360;
 	public RobotDrive driveTrain1;
 	Talon talon1, talon2;
+	Encoder encoder1;
 
 	/*This function is run when the robot is first started up and should be used for any initialization code.
 	* Create global objects here.
@@ -24,7 +25,10 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		talon1 = new Talon(TALON_1_PORT);
 		talon2 = new Talon(TALON_2_PORT);
-
+		
+		//encoder1 = new Encoder(final int aChannel, final int bChannel, boolean reverseDirection ); //Not sure of parameter contents
+		//encoder1.setDistancePerPulse(); //Not sure parameter contents
+		
 		//this is supposed to shut off the motors when joystick is at zero to save power.
 		//Does it work only on Jaguars?
 		talon1.enableDeadbandElimination(true);
@@ -94,7 +98,15 @@ public class Robot extends IterativeRobot {
     }
 
   /* This function is called periodically during autonomous */
-	public void autonomousPeriodic() { }
+	public void autonomousPeriodic() {
+		  	
+		while(encoder.getDistance() < AUTODISTANCE){
+			driveTrain1.drive(0.7, 0.0);
+			encoder.getDistance();
+		}
+		talon1.stopMotor();
+		talon2.stopMotor();
+	}
 
 	/* This function is called periodically during test mode */
 	/*** Run only one side of robot drive - based on logitech buttons****/
