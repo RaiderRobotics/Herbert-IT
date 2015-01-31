@@ -81,7 +81,7 @@ public class Robot extends IterativeRobot {
         double n1 = stick1X * stick1X + stick1Y * stick1Y;
         double n2 = stick2X * stick2X + stick2Y * stick2Y;
 
-	if (xbox360.getRawButton(XBOX_BTN_Y) {
+	if (xbox360.getRawButton(XBOX_BTN_Y)) {
 		setUpAngles();
 	}
 	
@@ -214,7 +214,7 @@ public class Robot extends IterativeRobot {
 	//later this should be fixed up with PID controls.
 	void turnByGyro() {
 		//turn robot
-		driveTrain.arcadeDrive(0, turnSpeed * turnDirection.dir);
+		driveTrain1.arcadeDrive(0, turnSpeed * turnDirection.dir);
 		
 		//update angle
 		currentAngle = (int)gyro1.getAngle();

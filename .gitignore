@@ -21,3 +21,4 @@ hs_err_pid*
 
 #This was recently created. Don't know why.
 sysProps.xml
+/bin/
