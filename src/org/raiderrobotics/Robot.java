@@ -2,7 +2,8 @@ package org.raiderrobotics;
 
 //import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.*;
-
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static org.raiderrobotics.RobotMap.*;
 
 /**
@@ -41,6 +42,19 @@ public class Robot extends IterativeRobot {
 
 		logitech = new Joystick(LOGITECH_PORT);
 		xbox360 = new Joystick(XBOX_PORT);
+		
+		//hopefully will put a "current status" button on the smart dashboard
+		SmartDashboard.putString("Current Status", "fine");
+		SmartDashboard.getString("Current Status");
+		
+		//Sendable chooser should create a list of selectable objects(they do nothing)
+		SendableChooser chooser1 = new SendableChooser();
+		
+		chooser1.addDefault("Deafault", "x");
+		chooser1.addObject("Option 1", "y");
+		chooser1.addObject("Option 2", "z");
+		SmartDashboard.putData("Chooser", chooser1);
+		
 	}
 
 	/* This function is called periodically during operator control.
