@@ -5,22 +5,38 @@ import edu.wpi.first.wpilibj.*;
 
 import static org.raiderrobotics.RobotMap.*;
 
-/**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the IterativeRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the manifest file in the resource
- * directory.
- */
 public class Robot extends IterativeRobot {
+	
+	/* Usage of Direction enum:
+	 * Direction turnDirection = Direction.CW;
+	 * turnDirection.dir  will return a +1 or -1
+	 * This makes sure that no other possibilities are allowed for turnDirection.
+	*/
+	enum Direction {CW (+1), CCW (-1);
+		private final int dir;
+		Direction(int dir) {
+			this.dir = dir;
+		}
+	};
+	
+	//TODO: test angles > 360; test angles < -360
+	
 	//Create object references
 	Joystick logitech, xbox360;
 	public RobotDrive driveTrain1;
 	Talon talon1, talon2;
+	Gyro gyro1;
 
+	boolean isTurning = false;
+	Direction turnDirection = Direction.CW;
+	int currentAngle = 0;	//should these be doubles?
+	int targetAngle = 0;
+	double turnSpeed = 0.8;
 	/*This function is run when the robot is first started up and should be used for any initialization code.
 	* Create global objects here.
 	*/
+	
+	
 	public void robotInit() {
 		talon1 = new Talon(TALON_1_PORT);
 		talon2 = new Talon(TALON_2_PORT);
@@ -28,7 +44,7 @@ public class Robot extends IterativeRobot {
 		//this is supposed to shut off the motors when joystick is at zero to save power.
 		//Does it work only on Jaguars?
 		talon1.enableDeadbandElimination(true);
-        talon2.enableDeadbandElimination(true);
+		talon2.enableDeadbandElimination(true);
 
 		//reversing 1,2 and 3,4 will switch front and back in arcade mode.
 		driveTrain1 = new RobotDrive(talon1, talon2);
@@ -41,6 +57,9 @@ public class Robot extends IterativeRobot {
 
 		logitech = new Joystick(LOGITECH_PORT);
 		xbox360 = new Joystick(XBOX_PORT);
+		
+		gyro1 = new Gyro(0);
+		gyro1.reset();
 	}
 
 	/* This function is called periodically during operator control.
@@ -62,6 +81,15 @@ public class Robot extends IterativeRobot {
         double n1 = stick1X * stick1X + stick1Y * stick1Y;
         double n2 = stick2X * stick2X + stick2Y * stick2Y;
 
+	if (xbox360.getRawButton(XBOX_BTN_Y) {
+		setUpAngles();
+	}
+	
+	if (isTurning) {
+		turnByGyro();
+	}
+	// NOTE: there is no interrupting this turning yet. The joystick will only mess it up now.
+	
         //If using an xBox controller
         if (n1 <= n2) {
             if (xbox360.getRawButton(XBOX_BUMPER_R)) {//high speed mode
@@ -108,6 +136,94 @@ public class Robot extends IterativeRobot {
 		} else {
 			talon1.stopMotor();
 			talon2.stopMotor();
+		}
+	}
+	
+	void setUpAngles() {
+		int quadrant = 1;
+		currentAngle = (int)gyro1.getAngle();
+		if (currentAngle > 0) {
+			int rem = Math.abs(currentAngle % 360);
+			if (rem > 0 && rem <= 90) quadrant=1;
+			if (rem > 90 && rem < 180) quadrant=2;
+			if (rem > 180 && rem <= 270) quadrant=3;
+			if (rem > 270 && rem < 360) quadrant=4;
+			
+			if (currentAngle%180 ==0) {
+				isTurning = false;
+				return;
+			}
+			switch(quadrant) {				
+			case 1:
+				turnDirection = Direction.CCW;
+				targetAngle = 0 + 360*(currentAngle/360);
+				break;
+			case 2:
+				turnDirection = Direction.CW;
+				targetAngle = 180 + 360*(currentAngle/360);
+				break;
+			case 3:
+				turnDirection = Direction.CCW;
+				targetAngle = 180 + 360*(currentAngle/360);
+				break;
+			case 4:
+				turnDirection = Direction.CW;
+				targetAngle = 360 + 360*(currentAngle/360);
+				break;	
+			default:
+				System.out.println("****** ERROR - no quadrant selected!");
+			}
+		} else {
+			int rem = currentAngle % 360;
+			if (rem >= -90 && rem < 0) quadrant=4;
+			if (rem > -180 && rem < -90) quadrant=3;
+			if (rem >= -270 && rem < -180) quadrant=2;
+			if (rem > -360 && rem < -270) quadrant=1;
+			
+			if (currentAngle%180 ==0) {
+				isTurning = false;
+				return;
+			}
+			
+			//set direction and target angle
+			switch(quadrant) {				
+			case 1:
+				turnDirection = Direction.CCW;
+				targetAngle = -360 + 360*(currentAngle/360);
+				break;
+			case 2:
+				turnDirection = Direction.CW;
+				targetAngle = -180 + 360*(currentAngle/360);
+				break;
+			case 3:
+				turnDirection = Direction.CCW;
+				targetAngle =  -180 + 360*(currentAngle/360) ;
+				break;
+			case 4:
+				turnDirection = Direction.CW;
+				targetAngle =  0 + 360*(currentAngle/360);
+				break;	
+			default:
+				System.out.println("****** ERROR - no quadrant selected!");
+			}
+		}
+		isTurning = true;
+	} //end of method
+	
+	//later this should be fixed up with PID controls.
+	void turnByGyro() {
+		//turn robot
+		driveTrain.arcadeDrive(0, turnSpeed * turnDirection.dir);
+		
+		//update angle
+		currentAngle = (int)gyro1.getAngle();
+		System.out.println("angle=" + currentAngle);
+		//see if we need to stop turning. These also work for negative angles.
+		if (turnDirection == Direction.CW) { // current angle is less than target angle
+			if (currentAngle >= targetAngle) isTurning = false;
+		}
+		if (turnDirection == Direction.CCW) { // current angle is greater than target angle
+			if (currentAngle <= targetAngle) isTurning = false;
 		}
 	}
 }
