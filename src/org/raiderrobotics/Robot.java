@@ -26,7 +26,7 @@ public class Robot extends IterativeRobot {
 		talon1 = new Talon(TALON_1_PORT);
 		talon2 = new Talon(TALON_2_PORT);
 		
-		encoder1 = new Encoder(1,0,); //parameters taken from Toropov023 branch (Robot.java)
+		encoder1 = new Encoder(1,0); //parameters taken from Toropov023 branch (Robot.java)
 		encoder1.setDistancePerPulse(0.18); //Not sure parameter contents. A guess from Toropov023
 		
 		//this is supposed to shut off the motors when joystick is at zero to save power.
@@ -101,7 +101,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 		  	
 		if (encoder1.getDistance() < AUTODISTANCE){
-			driveTrain1.drive(0.7, 0.0);
+			driveTrain1.drive(-0.7, 0.0);
 			
 		} else {
 			talon1.stopMotor();
