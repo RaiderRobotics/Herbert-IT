@@ -139,11 +139,12 @@ public class Robot extends IterativeRobot {
 		}
 	}
 	
+	//TODO: This ONLY works for the Y-AXIS. 
 	void setUpAngles() {
 		int quadrant = 1;
 		currentAngle = (int)gyro1.getAngle();
 		if (currentAngle > 0) {
-			int rem = Math.abs(currentAngle % 360);
+			int rem = currentAngle % 360;
 			if (rem > 0 && rem <= 90) quadrant=1;
 			if (rem > 90 && rem < 180) quadrant=2;
 			if (rem > 180 && rem <= 270) quadrant=3;
@@ -218,6 +219,7 @@ public class Robot extends IterativeRobot {
 		//update angle
 		currentAngle = (int)gyro1.getAngle();
 		System.out.println("angle=" + currentAngle);
+		
 		//see if we need to stop turning. These also work for negative angles.
 		if (turnDirection == Direction.CW) { // current angle is less than target angle
 			if (currentAngle >= targetAngle) isTurning = false;
