@@ -20,3 +20,4 @@ hs_err_pid*
 #something KT was using
 build.xml
 build.properties
+/bin/
