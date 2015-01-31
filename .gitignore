@@ -19,12 +19,5 @@ hs_err_pid*
 *.iws
 .idea/
 
-#These files are needed in order to transfer to roboRIO. 
-#They don't need to be uploaded to GitHub (I think)
-#We need it in order to build the projects properly (Kirill)
-#build.xml
-#build.properties
-/bin/
-
 #This was recently created. Don't know why.
 sysProps.xml
