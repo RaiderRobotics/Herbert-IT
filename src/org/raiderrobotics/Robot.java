@@ -1,6 +1,6 @@
 package org.raiderrobotics;
-// yoyo test download
-import org.raiderrobotics.sensors.QuickTurnExecutor;
+
+import org.raiderrobotics.sensors.GyroExecutor;
 
 import edu.wpi.first.wpilibj.*;
 
@@ -26,7 +26,7 @@ public class Robot extends IterativeRobot {
 	//global variables
 	private int driveState = ARCADE;
 
-	QuickTurnExecutor gyro;
+	GyroExecutor gyro;
 	
 	/*This function is run when the robot is first started up and should be used for any initialization code. */
 
@@ -54,7 +54,7 @@ public class Robot extends IterativeRobot {
 		//stickLBtn1 = new JoystickButton(stickL, 1);
 		//stickLBtn2 = new JoystickButton(stickL, 2);
 		
-		gyro = new QuickTurnExecutor(this, rightStick, new Gyro( new AnalogInput(0)));
+		gyro = new GyroExecutor(this, rightStick, new Gyro( new AnalogInput(0)));
 	}
 
 	/* This function is called periodically during autonomous */
@@ -79,10 +79,15 @@ public class Robot extends IterativeRobot {
 
 	// drive the robot normally
 	private void normalDrive() {
+		
 		if (driveState == ARCADE) {
 			driveTrain1.arcadeDrive(rightStick, true); //use squared inputs
 		} else {
 			driveTrain1.tankDrive(leftStick, rightStick);
+		}
+
+		if(rightStick.getX()!=0 || rightStick.getY()!=0 || (driveState == TANK && (leftStick.getX()!=0 || leftStick.getY()!=0))){ //joystick movement will override gyro turns
+			gyro.complete=true;
 		}
 		
 		gyro.check();
