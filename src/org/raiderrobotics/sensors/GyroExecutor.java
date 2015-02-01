@@ -32,12 +32,16 @@ public class GyroExecutor {
         this.main = robotMain;
         this.joystick = joystick;
         this.gyro = gyro;
+        this.gyro.reset(); //just in case
         gyro.setSensitivity(0.007); // "Our gyro is ADRSX622 , with a sensitivity of 7 mV/degree/sec" --Mr.Harwood
     }
     
     
 
     public void check() {
+    	//debug code starts
+    		System.out.println("Current angle: "+gyro.getAngle()+", reduced angle: "+gyro.getAngle()%360);
+    	//debug code over
     	
     	if(complete){
     		
