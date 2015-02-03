@@ -17,10 +17,6 @@ hs_err_pid*
 *.iws
 .idea/
 
-#something KT was using
-build.xml
-build.properties
-
 #eclipse??
 .classpath
 .project
