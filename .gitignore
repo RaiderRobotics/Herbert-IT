@@ -24,3 +24,4 @@ build.properties
 #eclipse??
 .classpath
 .project
+/bin/

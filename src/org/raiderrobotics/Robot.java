@@ -10,17 +10,12 @@ import edu.wpi.first.wpilibj.*;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
+
+//TEST OF MOTOR DRIVING DIRECTION 
 public class Robot extends IterativeRobot {
   
-  //constants
-	final static int ARCADE = 1;
-	final static int TANK = 2;
-	
-	//global variables
-	private int driveState = ARCADE;
-
 	//create object references
-	Joystick leftStick, rightStick;
+	Joystick leftStick;
 	public RobotDrive driveTrain1;
 	Talon talon1, talon2;
 
@@ -36,14 +31,7 @@ public class Robot extends IterativeRobot {
 		//reversing 1,2 and 3,4 will switch front and back in arcade mode.
 		driveTrain1 = new RobotDrive(talon1, talon2);
 
-		//this works to fix arcade joystick 
-		driveTrain1.setInvertedMotor(RobotDrive.MotorType.kFrontLeft,true);
-		driveTrain1.setInvertedMotor(RobotDrive.MotorType.kRearLeft,true);
-		driveTrain1.setInvertedMotor(RobotDrive.MotorType.kFrontRight,true);
-		driveTrain1.setInvertedMotor(RobotDrive.MotorType.kRearRight,true);
-
 		leftStick = new Joystick(0);
-		rightStick = new Joystick(1);
 	}
 
 	/* This function is called periodically during operator control.
@@ -51,22 +39,19 @@ public class Robot extends IterativeRobot {
 	*/
 	public void teleopPeriodic() {
 		
-		normalDrive();
-
-		//check for button press to switch mode. Use two buttons to prevent bounce.
-		boolean button2 = leftStick.getRawButton(2);
-		boolean button3 = leftStick.getRawButton(3);
-		if (button2) driveState = ARCADE;
-		if (button3) driveState = TANK;
-	}
-
-	// Drive the robot normally
-	private void normalDrive() {
-		if (driveState == ARCADE) {
-			driveTrain1.arcadeDrive(leftStick, true); //use squared inputs
-		} else {
-			driveTrain1.tankDrive(leftStick, rightStick);
+		if (leftStick.getRawButton(2))  driveTrain1.arcadeDrive(0.5, 0);
+		else if (leftStick.getRawButton(3))  {
+			talon1.set(0.5);
+			talon2.set(0.5);
 		}
+		else if (leftStick.getRawButton(4))  driveTrain1.drive(0.5, 0);
+		else if (leftStick.getRawButton(5))  driveTrain1.tankDrive(0.5, 0.5);
+		else {
+			talon1.set(0.5);
+			talon2.set(0.5);
+		}
+
+
 	}
 
   /* This function is called periodically during autonomous */
