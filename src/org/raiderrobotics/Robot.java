@@ -18,6 +18,9 @@ public class Robot extends IterativeRobot {
 	public RobotDrive driveTrain1;
 	Talon talon1, talon2;
 	Encoder encoder1;
+	
+	final static double AUTODISTANCE = 2000.0;  //distance(m) that the robot needs to drive to reach the tote in autonomous
+	
 
 	/*This function is run when the robot is first started up and should be used for any initialization code.
 	* Create global objects here.
@@ -99,10 +102,10 @@ public class Robot extends IterativeRobot {
 
   /* This function is called periodically during autonomous */
 	public void autonomousPeriodic() {
-		  	
+		//Drive slowly ... for exactly 2.00 metres. Then stop. Measure. Calibrate encoder
+		
 		if (encoder1.getDistance() < AUTODISTANCE){
-			driveTrain1.drive(-0.7, 0.0);
-			
+			driveTrain1.drive(-0.2, 0.0);			
 		} else {
 			talon1.stopMotor();
 			talon2.stopMotor();

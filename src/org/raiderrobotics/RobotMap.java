@@ -13,7 +13,7 @@ public final class RobotMap {
 	final static int NORMSPEED = 70;	//% speed of normal driving
 	final static int MAXSPEED = 95;	    //% speed of maximum motor output for fast driving
 						//drive team said that 100% is too fast for manual driving
-	final static double AUTODISTANCE = 200.0;  //distance(m) that the robot needs to drive to reach the tote in autonomous
+	
 	/* joysticks and buttons */
 	//Logitech joystick
 	final static int LOGITECH_TRIGGER = 1;
