@@ -30,7 +30,7 @@ public class Robot extends IterativeRobot {
 		talon2 = new Talon(TALON_2_PORT);
 		
 		encoder1 = new Encoder(1,0); //parameters taken from Toropov023 branch (Robot.java)
-		encoder1.setDistancePerPulse(0.18); //Not sure parameter contents. A guess from Toropov023
+		encoder1.setDistancePerPulse(0.1665); //Not sure parameter contents. A guess from Toropov023
 		
 		//this is supposed to shut off the motors when joystick is at zero to save power.
 		//Does it work only on Jaguars?
@@ -87,7 +87,7 @@ public class Robot extends IterativeRobot {
         //If using a Logitech controller
         else {
             if (logitech.getRawButton(LOGITECH_TRIGGER)) {
-                double x1max = stick1X * (MAXSPEED / 100.0);
+                double x1max = stick1X * (MAXSPEED / 100.0); 
                 double y1max = stick1Y * (MAXSPEED / 100.0);
 
                 driveTrain1.arcadeDrive(y1max, x1max, true); //use squared inputs
@@ -99,13 +99,23 @@ public class Robot extends IterativeRobot {
             }
         }
     }
+    
+    public void autonomousInit(){
+    	//vitally important
+    	encoder1.reset();
+    }
 
   /* This function is called periodically during autonomous */
 	public void autonomousPeriodic() {
 		//Drive slowly ... for exactly 2.00 metres. Then stop. Measure. Calibrate encoder
 		
-		if (encoder1.getDistance() < AUTODISTANCE){
-			driveTrain1.drive(-0.2, 0.0);			
+		if (encoder1.getDistance() < 2000.0){
+		
+			//drive() and tankDrive() dion't work
+			//1.0 didnt work. stuttered
+			talon1.set(0.5);
+			talon2.set(-0.5);			
+			//Timer.delay(.01);
 		} else {
 			talon1.stopMotor();
 			talon2.stopMotor();
