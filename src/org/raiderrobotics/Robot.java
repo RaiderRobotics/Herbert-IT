@@ -50,10 +50,10 @@ public class Robot extends IterativeRobot {
 		driveTrain1 = new RobotDrive(talon1, talon2);
 
 		//this works to fix arcade joystick
-		driveTrain1.setInvertedMotor(RobotDrive.MotorType.kFrontLeft,true);
-		driveTrain1.setInvertedMotor(RobotDrive.MotorType.kRearLeft,true);
-		driveTrain1.setInvertedMotor(RobotDrive.MotorType.kFrontRight,true);
-		driveTrain1.setInvertedMotor(RobotDrive.MotorType.kRearRight,true);
+		//driveTrain1.setInvertedMotor(RobotDrive.MotorType.kFrontLeft,true);
+		//driveTrain1.setInvertedMotor(RobotDrive.MotorType.kRearLeft,true);
+		//driveTrain1.setInvertedMotor(RobotDrive.MotorType.kFrontRight,true);
+		//driveTrain1.setInvertedMotor(RobotDrive.MotorType.kRearRight,true);
 
 		logitech = new Joystick(LOGITECH_PORT);
 		xbox360 = new Joystick(XBOX_PORT);
