@@ -72,17 +72,21 @@ public class GyroExecutor {
    
     
     
-    private void turn(double destinationAngle){  //only 4 destinations: 0; 90; 180; 270; 
+    public void turn(double destinationAngle){  //please try to use it in the range of 0-360, for the sake of debug
+    	
+    	double currentAngle = gyro.getAngle()%360; //make sure everything is in the range of 0-360
+    	destinationAngle = destinationAngle%360; //make sure everything is in the range of 0-360
+    	
         //Check for the throttle
         turnSpeed = (-joystick.getThrottle() + 1) / 2; //The throttle goes from -1 to 1, so we need to make it go from 0 to 1
         
-        if(Math.abs(destinationAngle - gyro.getAngle()) <= 0.01){ //stop the turn if the angle reaches 0.01 degree close to the destinationAngle
+        if(Math.abs(destinationAngle - currentAngle) <= 0.01){ //stop the turn if the angle reaches 0.01 degree close to the destinationAngle
         	main.driveTrain1.drive(0, 0);
         	complete = true; 
         	return;
         }
         
-        if( ( (destinationAngle - gyro.getAngle()) % 360 ) <= 180){  //turn clockwise if true         because : ahhh this is confusing to explain..... 
+        if( ( (destinationAngle - currentAngle) % 360 ) <= 180){  //turn clockwise if true, because the destinationAngle is under(or equal to) 180 degrees to the right (aka clockwise)
         	main.driveTrain1.drive(-1*turnSpeed, 1); //turn right (aka clockwise)
         }else{
         	main.driveTrain1.drive(1*turnSpeed, 1); //turn left (aka counter clockwise)
