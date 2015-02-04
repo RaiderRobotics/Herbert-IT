@@ -2,6 +2,7 @@ package org.raiderrobotics;
 
 //import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.Joystick.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static org.raiderrobotics.RobotMap.*;
@@ -88,6 +89,9 @@ public class Robot extends IterativeRobot {
                 double y2norm = stick2Y * (NORMSPEED / 100.0);
 
                 driveTrain1.arcadeDrive(y2norm, x2norm, true);
+            }
+            if(xbox360.getRawButton(XBOX_BTN_A)) {
+            	xbox360.setRumble(RumbleType.kLeftRumble, 1);
             }
         }
 
