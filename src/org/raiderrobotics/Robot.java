@@ -90,7 +90,8 @@ public class Robot extends IterativeRobot {
 		} else {
 			driveTrain1.tankDrive(leftStick, rightStick);
 		}
-
+		
+		if(driveState == ARCADE){
 		accelerometerX = accel.getAcceleration(ADXL345_I2C.Axes.kX);
 		
 		accelerometerY = accel.getAcceleration(ADXL345_I2C.Axes.kY);
@@ -100,6 +101,13 @@ public class Robot extends IterativeRobot {
 		accelerations = accel.getAccelerations();
 		
 		acceleration = accelerations.XAxis;
+		
+		
+		System.out.println("X vaue = " + accelerometerX);
+		System.out.println("Y value = " + accelerometerY);
+		System.out.println("Z value = " + accelerometerZ);
+		System.out.println("Aceleration = " + acceleration);
+		}
 
 
 	/* This function is called periodically during test mode */
