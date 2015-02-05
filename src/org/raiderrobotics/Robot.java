@@ -25,10 +25,15 @@ public class Robot extends IterativeRobot {
 
 	//global variables
 	private int driveState = ARCADE;
-
-	GyroExecutor gyro;
 	
-	/*This function is run when the robot is first started up and should be used for any initialization code. */
+	ADXL345_I2C accel;
+	Double accelerationX;
+	Double accelerationY;
+	Double accelerationZ;
+	ADXL345_I2C.AllAxes accelerations;
+
+
+
 
 	//create global objects here
 	public void robotInit() {
@@ -86,12 +91,16 @@ public class Robot extends IterativeRobot {
 			driveTrain1.tankDrive(leftStick, rightStick);
 		}
 
-		if(rightStick.getX()!=0 || rightStick.getY()!=0 || (driveState == TANK && (leftStick.getX()!=0 || leftStick.getY()!=0))){ //joystick movement will override gyro turns
-			gyro.complete=true;
-		}
+		accelerometerX = accel.getAcceleration(ADXL345_I2C.Axes.kX);
 		
-		gyro.check();
-	}
+		accelerometerY = accel.getAcceleration(ADXL345_I2C.Axes.kY);
+		
+		accelerometerZ = accel.getAcceleration(ADXL345_I2C.Axes.kZ);
+
+		accelerations = accel.getAccelerations();
+		
+		acceleration = accelerations.XAxis;
+
 
 	/* This function is called periodically during test mode */
 	public void testPeriodic() {
