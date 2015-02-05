@@ -59,7 +59,7 @@ public class Robot extends IterativeRobot {
 		//stickLBtn1 = new JoystickButton(stickL, 1);
 		//stickLBtn2 = new JoystickButton(stickL, 2);
 		
-		gyro = new GyroExecutor(this, rightStick, new Gyro( new AnalogInput(0)));
+		accel= new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range);
 	}
 
 	/* This function is called periodically during autonomous */
