@@ -45,7 +45,14 @@ public final class RobotMap {
 	//motor controller ports
 	final static int TALON_1_PORT = 1;
 	final static int TALON_2_PORT = 2;
-
+	
+	
+	//autonomous vars
+	final static int AUTO_RECYCLE = 0;
+	final static int AUTO_TOTE = 1;
+	final static int AUTO_MULTITOTE = 2;
+	final static double AUTO_ZONE_DISTANCE = 3000.0;
+	final static double AUTO_BACKUP_DISTANCE = -500.0;
 	//global variables that are NOT final
 	
 }
