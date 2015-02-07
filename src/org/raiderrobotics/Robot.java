@@ -26,10 +26,10 @@ public class Robot extends IterativeRobot {
 	//global variables
 	private int driveState = ARCADE;
 	
-	ADXL345_I2C accel;
-	Double accelerationX;
-	Double accelerationY;
-	Double accelerationZ;
+	
+	double accelerationX;
+	double accelerationY;
+	double accelerationZ;
 	
 
 
@@ -59,7 +59,7 @@ public class Robot extends IterativeRobot {
 		//stickLBtn1 = new JoystickButton(stickL, 1);
 		//stickLBtn2 = new JoystickButton(stickL, 2);
 		
-		private BuiltInAccelerometer accel = new BuiltInAccelerometer();
+		BuiltInAccelerometer accel = new BuiltInAccelerometer();
 	}
 
 	/* This function is called periodically during autonomous */
