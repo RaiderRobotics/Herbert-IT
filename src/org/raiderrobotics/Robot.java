@@ -2,7 +2,6 @@ package org.raiderrobotics;
 
 //import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.*;
-
 import static org.raiderrobotics.RobotMap.*;
 
 public class Robot extends IterativeRobot {
@@ -15,15 +14,15 @@ public class Robot extends IterativeRobot {
 	enum Direction {CW (+1), CCW (-1);
 		private final int dir;
 		Direction(int dir) {
-			this.dir = dir;
+			this.dir = dir; 
 		}
 	};
 	
 	//TODO: test angles > 360; test angles < -360
 	
 	//Create object references
-	Joystick logitech, xbox360;
-	public RobotDrive driveTrain1;
+	Joystick logitech, xbox360; 
+	public RobotDrive driveTrain1; 
 	Talon talon1, talon2;
 	Gyro gyro1;
 
@@ -50,10 +49,10 @@ public class Robot extends IterativeRobot {
 		driveTrain1 = new RobotDrive(talon1, talon2);
 
 		//this works to fix arcade joystick
-		//driveTrain1.setInvertedMotor(RobotDrive.MotorType.kFrontLeft,true);
-		//driveTrain1.setInvertedMotor(RobotDrive.MotorType.kRearLeft,true);
-		//driveTrain1.setInvertedMotor(RobotDrive.MotorType.kFrontRight,true);
-		//driveTrain1.setInvertedMotor(RobotDrive.MotorType.kRearRight,true);
+		driveTrain1.setInvertedMotor(RobotDrive.MotorType.kFrontLeft,true);
+		driveTrain1.setInvertedMotor(RobotDrive.MotorType.kRearLeft,true);
+		driveTrain1.setInvertedMotor(RobotDrive.MotorType.kFrontRight,true);
+		driveTrain1.setInvertedMotor(RobotDrive.MotorType.kRearRight,true);
 
 		logitech = new Joystick(LOGITECH_PORT);
 		xbox360 = new Joystick(XBOX_PORT);
@@ -67,6 +66,11 @@ public class Robot extends IterativeRobot {
 	*/
 	public void teleopPeriodic() {
 		normalDrive();
+	}
+	
+	@Override
+	public void disabledPeriodic() {
+		isTurning = false;
 	}
 
 	// Drive the robot normally
@@ -93,7 +97,7 @@ public class Robot extends IterativeRobot {
         //If using an xBox controller
         if (n1 <= n2) {
             if (xbox360.getRawButton(XBOX_BUMPER_R)) {//high speed mode
-                double x2max = stick2X * (MAXSPEED / 100.0);
+                double x2max = stick2X * (MAXSPEED / 100.0); 
                 double y2max = stick2Y * (MAXSPEED / 100.0);
 
                 driveTrain1.arcadeDrive(y2max, x2max, true); //use squared inputs
@@ -123,21 +127,6 @@ public class Robot extends IterativeRobot {
 
   /* This function is called periodically during autonomous */
 	public void autonomousPeriodic() { }
-
-	/* This function is called periodically during test mode */
-	/*** Run only one side of robot drive - based on logitech buttons****/
-	public void testPeriodic() {
-		if (logitech.getRawButton(LOGITECH_BTN3) ) {
-			talon1.set(logitech.getY());
-			talon2.stopMotor();
-		} else if (logitech.getRawButton(LOGITECH_BTN4) ) {
-			talon2.set(logitech.getY());
-			talon1.stopMotor();
-		} else {
-			talon1.stopMotor();
-			talon2.stopMotor();
-		}
-	}
 	
 	//TODO: This ONLY works for the Y-AXIS. 
 	void setUpAngles() {
@@ -215,7 +204,7 @@ public class Robot extends IterativeRobot {
 	void turnByGyro() {
 		//turn robot
 		
-		driveTrain1.arcadeDrive(0, -1 * turnSpeed * turnDirection.dir);
+		driveTrain1.arcadeDrive(0, turnSpeed * turnDirection.dir);
 		
 		//update angle
 		currentAngle = (int)gyro1.getAngle();
@@ -228,6 +217,22 @@ public class Robot extends IterativeRobot {
 		}
 		if (turnDirection == Direction.CCW) { // current angle is greater than target angle
 			if (currentAngle <= targetAngle) isTurning = false;
+		}
+	}
+
+	
+	/* This function is called periodically during test mode */
+	/*** Run only one side of robot drive - based on logitech buttons****/
+	public void testPeriodic() {
+		if (logitech.getRawButton(LOGITECH_BTN3) ) {
+			talon1.set(logitech.getY());
+			talon2.stopMotor();
+		} else if (logitech.getRawButton(LOGITECH_BTN4) ) {
+			talon2.set(logitech.getY());
+			talon1.stopMotor();
+		} else {
+			talon1.stopMotor();
+			talon2.stopMotor();
 		}
 	}
 }
