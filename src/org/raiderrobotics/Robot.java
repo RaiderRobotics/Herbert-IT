@@ -115,7 +115,7 @@ public class Robot extends IterativeRobot {
             } else {
                 double x1norm = stick1X * (NORMSPEED / 100.0);
                 double y1norm = stick1Y * (NORMSPEED / 100.0);
-
+                
                 driveTrain1.arcadeDrive(y1norm, x1norm, true);
             }
         }
@@ -214,11 +214,13 @@ public class Robot extends IterativeRobot {
 	//later this should be fixed up with PID controls.
 	void turnByGyro() {
 		//turn robot
-		driveTrain1.arcadeDrive(0, turnSpeed * turnDirection.dir);
+		
+		driveTrain1.arcadeDrive(0, -1 * turnSpeed * turnDirection.dir);
 		
 		//update angle
 		currentAngle = (int)gyro1.getAngle();
 		System.out.println("angle=" + currentAngle);
+		System.out.println("speed=" + turnSpeed * turnDirection.dir);
 		
 		//see if we need to stop turning. These also work for negative angles.
 		if (turnDirection == Direction.CW) { // current angle is less than target angle

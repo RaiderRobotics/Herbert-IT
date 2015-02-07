@@ -1,6 +1,5 @@
 *.class
-.project
-.classpath
+
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
@@ -20,5 +19,4 @@ hs_err_pid*
 .idea/
 
 #This was recently created. Don't know why.
-sysProps.xml
 /bin/
