@@ -30,7 +30,10 @@ public class Robot extends IterativeRobot {
 	double accelerationX;
 	double accelerationY;
 	double accelerationZ;
+	ADXL345_I2C.AllAxes accelerations; //Dont think we need this, but... im not sure
+	BuiltInAccelerometer accel = new BuiltInAccelerometer();
 	
+	int count=0;
 
 
 
@@ -59,7 +62,8 @@ public class Robot extends IterativeRobot {
 		//stickLBtn1 = new JoystickButton(stickL, 1);
 		//stickLBtn2 = new JoystickButton(stickL, 2);
 		
-		BuiltInAccelerometer accel = new BuiltInAccelerometer();
+		//accel= new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range); DONT NEED THIS
+		
 	}
 
 	/* This function is called periodically during autonomous */
@@ -84,31 +88,34 @@ public class Robot extends IterativeRobot {
 
 	// drive the robot normally
 	private void normalDrive() {
-		
+
 		if (driveState == ARCADE) {
 			driveTrain1.arcadeDrive(rightStick, true); //use squared inputs
 		} else {
 			driveTrain1.tankDrive(leftStick, rightStick);
 		}
 		
-		if(driveState == ARCADE){
-		accelerationX = accel.getAcceleration(ADXL345_I2C.Axes.kX);
+		if(driveState == ARCADE && count%10==0){
+		accelerationX = accel.getX();
 		
-		accelerationY = accel.getAcceleration(ADXL345_I2C.Axes.kY);
+		accelerationY = accel.getY();
 		
-		accelerationZ = accel.getAcceleration(ADXL345_I2C.Axes.kZ);
+		accelerationZ = accel.getZ();
 
-		accelerations = accel.getAccelerations();
+		//accelerations = accel.getAccelerations();
 		
-		acceleration = accelerations.XAxis;
+		//acceleration = accelerations.XAxis;
 		
 		
-		System.out.println("X vaue = " + accelerometerX);
-		System.out.println("Y value = " + accelerometerY);
-		System.out.println("Z value = " + accelerometerZ);
-		System.out.println("Aceleration = " + acceleration);
+		System.out.println("X vaue = " + accelerationX);
+		System.out.println("Y value = " + accelerationY);
+		System.out.println("Z value = " + accelerationZ + "\n");
+		//System.out.println("Aceleration = " + acceleration);
+		
+		
 		}
-
+	count++;
+	}
 
 	/* This function is called periodically during test mode */
 	public void testPeriodic() {
