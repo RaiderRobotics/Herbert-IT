@@ -1,6 +1,6 @@
 package org.raiderrobotics;
 
-import org.raiderrobotics.sensors.GyroExecutor;
+import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 
 import edu.wpi.first.wpilibj.*;
 
@@ -30,7 +30,7 @@ public class Robot extends IterativeRobot {
 	Double accelerationX;
 	Double accelerationY;
 	Double accelerationZ;
-	ADXL345_I2C.AllAxes accelerations;
+	
 
 
 
@@ -59,7 +59,7 @@ public class Robot extends IterativeRobot {
 		//stickLBtn1 = new JoystickButton(stickL, 1);
 		//stickLBtn2 = new JoystickButton(stickL, 2);
 		
-		accel= new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range);
+		private BuiltInAccelerometer accel = new BuiltInAccelerometer();
 	}
 
 	/* This function is called periodically during autonomous */
@@ -92,11 +92,11 @@ public class Robot extends IterativeRobot {
 		}
 		
 		if(driveState == ARCADE){
-		accelerometerX = accel.getAcceleration(ADXL345_I2C.Axes.kX);
+		accelerationX = accel.getAcceleration(ADXL345_I2C.Axes.kX);
 		
-		accelerometerY = accel.getAcceleration(ADXL345_I2C.Axes.kY);
+		accelerationY = accel.getAcceleration(ADXL345_I2C.Axes.kY);
 		
-		accelerometerZ = accel.getAcceleration(ADXL345_I2C.Axes.kZ);
+		accelerationZ = accel.getAcceleration(ADXL345_I2C.Axes.kZ);
 
 		accelerations = accel.getAccelerations();
 		
