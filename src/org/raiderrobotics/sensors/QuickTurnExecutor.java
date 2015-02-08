@@ -18,7 +18,7 @@ public class QuickTurnExecutor {
     //TODO determine the buttons
     //Joystick buttons matrix
     double[][] buttons = new double[][]{
-            //Button number | Turn degree | turn for DriveTrain1 | turn for DriveTrain2
+            //Button number | Turn degree | turn speed
             {5, -90, 0.5}, //90 Left
             {3, -180, 0.5}, //180 Left
             {6, 90, -0.5}, //90 Right
