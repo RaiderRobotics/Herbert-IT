@@ -71,18 +71,12 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		NIVision.IMAQdxStartAcquisition(session);
 
-		/**
-		 * grab an image, draw the circle, and provide it for the camera server
-		 * which will in turn send it to the dashboard.
-		 */
-		NIVision.Rect rect = new NIVision.Rect(10, 10, 100, 100);
-
+		
+		
 		while (isOperatorControl() && isEnabled()) {
-
+			//grabs an image
 			NIVision.IMAQdxGrab(session, frame, 1);
-			NIVision.imaqDrawShapeOnImage(frame, frame, rect,
-					DrawMode.DRAW_VALUE, ShapeMode.SHAPE_OVAL, 0.0f);
-
+			//sends the image to the smart dashboard
 			CameraServer.getInstance().setImage(frame);
 
 			normalDrive();
